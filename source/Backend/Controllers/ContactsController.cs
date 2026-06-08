@@ -31,6 +31,23 @@ public class ContactsController : ControllerBase
         return Ok(contact.ToDto());
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, UpdateContactDto dto)
+    {
+        var contact = await _context.Contacts.FindAsync(id);
+
+        if (contact == null)
+            return NotFound();
+
+        contact.Name = dto.Name;
+        contact.Email = dto.Email;
+        contact.Phone = dto.Phone;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(contact.ToDto());
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(CreateContactDto dto)
     {
